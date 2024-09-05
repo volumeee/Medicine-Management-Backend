@@ -1,0 +1,836 @@
+openapi: 3.0.0
+info:
+  title: MEDICINE_MANAGEMENT API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /auth/register:
+    post:
+      summary: Register new user
+      tags:
+        - LOGIN REGISTER
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                roleName:
+                  type: string
+      responses:
+        "200":
+          description: Successful registration
+
+  /auth/login:
+    post:
+      summary: Login user
+      tags:
+        - LOGIN REGISTER
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Successful login
+
+  /users/forgot-password:
+    post:
+      summary: Forgot password
+      tags:
+        - LOGIN REGISTER
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        "200":
+          description: Password reset initiated
+
+  /users/reset-password:
+    post:
+      summary: Reset password
+      tags:
+        - LOGIN REGISTER
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                otp:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        "200":
+          description: Password reset successful
+
+  /medicines?page={page}:
+    get:
+      summary: Get all medicines
+      tags:
+        - MEDICINES
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful retrieval of medicines
+  /medicines:
+    post:
+      summary: Create medicine
+      tags:
+        - MEDICINES
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                stock_quantity:
+                  type: integer
+      responses:
+        "201":
+          description: Medicine created successfully
+
+  /medicines/{id}:
+    get:
+      summary: Get medicine details
+      tags:
+        - MEDICINES
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful retrieval of medicine details
+
+    put:
+      summary: Update medicine
+      tags:
+        - MEDICINES
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expiry_date:
+                  type: string
+                  format: date
+      responses:
+        "200":
+          description: Medicine updated successfully
+
+    delete:
+      summary: Delete medicine
+      tags:
+        - MEDICINES
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Medicine deleted successfully
+
+  /users/create-user:
+    post:
+      summary: Create user
+      tags:
+        - USER
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                roleName:
+                  type: string
+      responses:
+        "201":
+          description: User created successfully
+
+  /users?page={page}:
+    get:
+      summary: Get all users
+      tags:
+        - USER
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful retrieval of users
+
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      tags:
+        - USER
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful retrieval of user details
+
+  /users/update-user/{id}:
+    put:
+      summary: Update user
+      tags:
+        - USER
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+      responses:
+        "200":
+          description: User updated successfully
+
+  /users/change-password:
+    put:
+      summary: Change password
+      tags:
+        - USER
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                currentPassword:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        "200":
+          description: Password changed successfully
+
+  /users/update-username:
+    put:
+      summary: Update username
+      tags:
+        - USER
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newUsername:
+                  type: string
+      responses:
+        "200":
+          description: Username updated successfully
+
+  /users/update-email:
+    put:
+      summary: Update email
+      tags:
+        - USER
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newEmail:
+                  type: string
+      responses:
+        "200":
+          description: Email updated successfully
+
+  /users/update-role:
+    put:
+      summary: Update role
+      tags:
+        - USER
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                newRoleId:
+                  type: integer
+      responses:
+        "200":
+          description: Role updated successfully
+
+  /suppliers:
+    post:
+      summary: Create supplier
+      tags:
+        - SUPPLIER
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                contact_person:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string
+      responses:
+        "201":
+          description: Supplier created successfully
+
+  /suppliers?page={page}:
+    get:
+      summary: Get all suppliers
+      tags:
+        - SUPPLIER
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful retrieval of suppliers
+
+  /suppliers/{id}:
+    get:
+      summary: Get supplier by ID
+      tags:
+        - SUPPLIER
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful retrieval of supplier details
+
+    put:
+      summary: Update supplier
+      tags:
+        - SUPPLIER
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                contact_person:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string
+      responses:
+        "200":
+          description: Supplier updated successfully
+
+    delete:
+      summary: Delete supplier
+      tags:
+        - SUPPLIER
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Supplier deleted successfully
+
+  /purchases:
+    post:
+      summary: Create purchase
+      tags:
+        - PURCHASE
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                supplier_id:
+                  type: integer
+                purchase_date:
+                  type: string
+                  format: date
+                status:
+                  type: string
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      medicine_id:
+                        type: integer
+                      quantity:
+                        type: integer
+                      unit_price:
+                        type: number
+      responses:
+        "201":
+          description: Purchase created successfully
+  /purchases?page={page}:
+    get:
+      summary: Get all purchases
+      tags:
+        - PURCHASE
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful retrieval of purchases
+
+  /purchases/{id}:
+    get:
+      summary: Get purchase by ID
+      tags:
+        - PURCHASE
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful retrieval of purchase details
+
+    put:
+      summary: Update purchase
+      tags:
+        - PURCHASE
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                supplier_id:
+                  type: string
+                  format: date
+                status:
+                  type: string
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      medicine_id:
+                        type: integer
+                      quantity:
+                        type: integer
+                      unit_price:
+                        type: number
+      responses:
+        "200":
+          description: Purchase updated successfully
+
+    delete:
+      summary: Delete purchase
+      tags:
+        - PURCHASE
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Purchase deleted successfully
+
+  /sales:
+    post:
+      summary: Create sale
+      tags:
+        - SALE
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sale_date:
+                  type: string
+                  format: date
+                customer_name:
+                  type: string
+                status:
+                  type: string
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      medicine_id:
+                        type: integer
+                      quantity:
+                        type: integer
+      responses:
+        "201":
+          description: Sale created successfully
+
+  /sales?page={page}:
+    get:
+      summary: Get all sales
+      tags:
+        - SALE
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful retrieval of sales
+
+  /sales/{id}:
+    get:
+      summary: Get sale by ID
+      tags:
+        - SALE
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful retrieval of sale details
+
+    put:
+      summary: Update sale
+      tags:
+        - SALE
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sale_date:
+                  type: string
+                  format: date
+                customer_name:
+                  type: string
+                status:
+                  type: string
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      medicine_id:
+                        type: integer
+                      quantity:
+                        type: integer
+      responses:
+        "200":
+          description: Sale updated successfully
+
+    delete:
+      summary: Delete sale
+      tags:
+        - SALE
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Sale deleted successfully
+
+  /home:
+    get:
+      summary: Get home details
+      tags:
+        - HOME
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: pharmacistPage
+          schema:
+            type: integer
+        - in: query
+          name: supplierPage
+          schema:
+            type: integer
+        - in: query
+          name: purchasesPage
+          schema:
+            type: integer
+        - in: query
+          name: salesPage
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful retrieval of home details
+
+  /report/genereate-profit-report:
+    get:
+      summary: Generate profit report
+      tags:
+        - REPORT
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startDate
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDate
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Successful generation of profit report
+
+  /report/genereate-inventory-report:
+    get:
+      summary: Generate inventory report
+      tags:
+        - REPORT
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startDate
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDate
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Successful generation of inventory report
+
+  /report/genereate-expiration-medicine-report:
+    get:
+      summary: Generate expiration medicine report
+      tags:
+        - REPORT
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startDate
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDate
+
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Successful generation of expiration medicine report
+
+  /report/genereate-sales-report:
+    get:
+      summary: Generate sales report
+      tags:
+        - REPORT
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startDate
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDate
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: role
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful generation of sales report
