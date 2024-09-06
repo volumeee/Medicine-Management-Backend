@@ -17,6 +17,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// middleware to set the Permissions-Policy header
+app.use((req, res, next) => {
+  res.setHeader(
+    "Permissions-Policy",
+    "private-state-token-redemption=(), private-state-token-issuance=(), browsing-topics=()"
+  );
+  next();
+});
+
 //routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
